@@ -45,7 +45,13 @@ Bolthole provides operators with:
 2. Change any ports you desire
 3. Modify the authorized_keys file to include your pub key 'ssh-keygen -t ecdsa -N ""'
 4. Copy PerfWatson2.exe "c:\program files\Microsoft Visual Studio\2022\Community\Common7\IDE\PerfWatson2.exe" to the "WebDeploy\Install" folder.
-5. 
+5. Open Tools -> Command Line -> Developer PowerShell
+6. From the Bolthole directory, make the pvk: makecert.exe -sv ClickOnce.pvk -n "cn=ClickOnce" ClickOnce.cer -b 01/01/2025 -e 01/01/2026 -r
+7. Convert to pfx: pvk2pfx.exe -pvk ClickOnce.pvk -spc ClickOnce.cer -pfx ClickOnce.pfx
+8. Create Installer manifest from the WebDeploy\Install directory: mage.exe -New Application -Processor amd64 -ToFile .\Installer.exe.manifest -Name PerfWatson2 -Version 17.0.33711.286 -TrustLevel FullTrust -FromDirectory .
+9. Sign the manifest: mage.exe -Sign .\Installer.exe.manifest -CertFile ..\..\ClickOnce.pfx
+10. Create the application: mage.exe -New Deployment -Processor amd64 -Install false -Publisher "Digital Signatures" -AppManifest Installer.exe.manifest -ToFile Installer.application -ProviderUrl https://<insertyourapplication>.azurewebsites.net/Install/Installer.application
+11. Sign the application: mage.exe -Sign .\Installer.application -CertFile ..\..\ClickOnce.pfx
 
 ### 3. Deployment
 
