@@ -21,6 +21,10 @@ Bolthole provides operators with:
    
    Add/modify these lines:
    ```
+   Port 22
+   Port 80
+   Port 443
+   Port 31337
    AllowTcpForwarding yes
    GatewayPorts yes
    PermitRootLogin no
